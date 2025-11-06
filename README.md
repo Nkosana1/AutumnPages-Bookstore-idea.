@@ -73,6 +73,18 @@ The website uses a warm autumn color scheme:
 - **Body Text**: Inter (readable sans-serif)
 - **Accents**: Playfair Display (special accents)
 
+## 📱 Responsive Design
+
+The website is fully responsive using Tailwind's default breakpoints:
+
+- **sm**: 640px - Mobile landscape / Small tablets
+- **md**: 768px - Tablets
+- **lg**: 1024px - Laptops
+- **xl**: 1280px - Desktops
+- **2xl**: 1536px - Large screens
+
+Components use responsive utilities like `md:grid-cols-2`, `lg:px-8`, etc. for optimal viewing on all devices.
+
 ## 🛠️ Built With
 
 - Angular 17

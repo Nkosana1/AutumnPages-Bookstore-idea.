@@ -17,6 +17,7 @@ import { Book } from '../../../models/book.interface';
              [routerLink]="['/books', book.id]">
           <img [src]="book.coverImage" 
                [alt]="book.title"
+               loading="lazy"
                class="w-full h-48 object-cover rounded-lg shadow-md mb-2">
           <p class="text-sm font-serif text-chocolate truncate">{{ book.title }}</p>
         </div>

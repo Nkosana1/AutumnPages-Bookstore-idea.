@@ -12,7 +12,10 @@ import { Book } from '../../../models/book.interface';
         <div *ngFor="let book of books; let i = index" 
              class="min-w-full px-4 flex-shrink-0">
           <div class="bg-gradient-card rounded-xl p-6 flex items-center space-x-6">
-            <img [src]="book.coverImage" [alt]="book.title" class="w-32 h-48 object-cover rounded-lg shadow-lg">
+            <img [src]="book.coverImage" 
+                 [alt]="book.title" 
+                 loading="lazy"
+                 class="w-32 h-48 object-cover rounded-lg shadow-lg">
             <div class="flex-1">
               <h3 class="text-2xl font-bold text-chocolate mb-2 font-serif">{{ book.title }}</h3>
               <p class="text-soft-taupe mb-4 font-sans">by {{ book.author }}</p>

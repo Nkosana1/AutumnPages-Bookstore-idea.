@@ -23,6 +23,7 @@ import { Observable } from 'rxjs';
         <div>
           <img [src]="book.coverImage" 
                [alt]="book.title"
+               loading="lazy"
                class="w-full rounded-xl shadow-2xl">
           <button *ngIf="book.previewImages && book.previewImages.length > 0" 
                   class="mt-4 w-full bg-chocolate hover:bg-deep-rust text-vanilla px-6 py-3 rounded-lg font-semibold transition-all">
@@ -86,7 +87,10 @@ import { Observable } from 'rxjs';
       <div *ngIf="author$ | async as author" class="bg-gradient-card rounded-xl p-8 mb-16">
         <h2 class="text-3xl font-bold text-chocolate mb-4 font-serif">About the Author</h2>
         <div class="flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-6">
-          <img [src]="author.image" [alt]="author.name" class="w-32 h-32 rounded-full object-cover border-4 border-autumn-orange">
+          <img [src]="author.image" 
+               [alt]="author.name" 
+               loading="lazy"
+               class="w-32 h-32 rounded-full object-cover border-4 border-autumn-orange">
           <div class="flex-1">
             <h3 class="text-2xl font-semibold text-chocolate mb-2 font-serif">{{ author.name }}</h3>
             <p class="text-charcoal font-sans leading-relaxed mb-4">{{ author.bio }}</p>

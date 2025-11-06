@@ -12,6 +12,7 @@ import { Author } from '../../../models/author.model';
       <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
         <img [src]="author.image" 
              [alt]="author.name"
+             loading="lazy"
              class="w-32 h-32 rounded-full object-cover border-4 border-autumn-orange shadow-lg">
         <div class="flex-1 text-center md:text-left">
           <h3 class="text-3xl font-bold text-chocolate mb-2 font-serif">Featured Author</h3>

@@ -12,6 +12,7 @@ import { Book } from '../../../models/book.interface';
       <div class="relative h-80 overflow-hidden">
         <img [src]="book.coverImage" 
              [alt]="book.title"
+             loading="lazy"
              class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
         <div class="absolute top-4 right-4 bg-autumn-orange text-vanilla px-3 py-1 rounded-full text-sm font-semibold">
           ${{ book.price }}
