@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { SearchService } from '../../../services/search.service';
+import { SearchService } from '../../../../services/search.service';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 
 @Component({
@@ -61,7 +61,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(query => {
       if (query.length >= 2) {
-        this.searchService.getAutocompleteSuggestions(query).subscribe(suggestions => {
+        this.searchService.getAutocompleteSuggestions(query).subscribe((suggestions: string[]) => {
           this.suggestions = suggestions;
         });
       } else {

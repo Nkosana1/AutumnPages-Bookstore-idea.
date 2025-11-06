@@ -1,6 +1,6 @@
 export interface Review {
   id: number;
-  bookId: number;
+  bookId: string | number;
   userId: number;
   userName: string;
   userAvatar?: string;

@@ -270,7 +270,7 @@ export class BookService {
   }
 
   getBookById(id: string | number): Observable<Book | undefined> {
-    const bookId = typeof id === 'string' ? id : id.toString();
+    const bookId = typeof id === 'string' ? id : String(id);
     
     return this.http.get<Book>(`${this.apiUrl}/${bookId}`)
       .pipe(
@@ -280,9 +280,11 @@ export class BookService {
         }),
         catchError(() => {
           // Fallback to mock data if API fails
-          const book = this.mockBooks.find(b => 
-            typeof b.id === 'string' ? b.id === bookId : b.id.toString() === bookId
-          );
+          const bookIdStr = typeof bookId === 'string' ? bookId : String(bookId);
+          const book = this.mockBooks.find(b => {
+            const bIdStr = typeof b.id === 'string' ? b.id : String(b.id);
+            return bIdStr === bookIdStr;
+          });
           if (book) {
             this.addToViewedBooks(book);
           }
@@ -374,17 +376,18 @@ export class BookService {
   }
 
   getRelatedBooks(bookId: string | number, limit: number = 4): Observable<Book[]> {
-    const idStr = typeof bookId === 'string' ? bookId : bookId.toString();
+    const idStr = typeof bookId === 'string' ? bookId : String(bookId);
     
     return this.getBooks().pipe(
       map(books => {
-        const book = books.find(b => 
-          typeof b.id === 'string' ? b.id === idStr : b.id.toString() === idStr
-        );
+        const book = books.find(b => {
+          const bIdStr = typeof b.id === 'string' ? b.id : String(b.id);
+          return bIdStr === idStr;
+        });
         if (!book) return [];
         
         return books.filter(b => {
-          const bIdStr = typeof b.id === 'string' ? b.id : b.id.toString();
+          const bIdStr = typeof b.id === 'string' ? b.id : String(b.id);
           if (bIdStr === idStr) return false;
           
           // Match by shared genres or same author
@@ -397,13 +400,14 @@ export class BookService {
       }),
       catchError(() => {
         // Fallback to mock data
-        const book = this.mockBooks.find(b => 
-          typeof b.id === 'string' ? b.id === idStr : b.id.toString() === idStr
-        );
+        const book = this.mockBooks.find(b => {
+          const bIdStr = typeof b.id === 'string' ? b.id : String(b.id);
+          return bIdStr === idStr;
+        });
         if (!book) return of([]);
         
         const related = this.mockBooks.filter(b => {
-          const bIdStr = typeof b.id === 'string' ? b.id : b.id.toString();
+          const bIdStr = typeof b.id === 'string' ? b.id : String(b.id);
           if (bIdStr === idStr) return false;
           
           if (book.genres && b.genres) {
@@ -423,7 +427,7 @@ export class BookService {
     return this.getBooks().pipe(
       map(books => {
         const viewedBooks = books.filter(b => {
-          const idStr = typeof b.id === 'string' ? b.id : b.id.toString();
+          const idStr = typeof b.id === 'string' ? b.id : String(b.id);
           return viewedIds.includes(idStr);
         });
         return viewedBooks.slice(-limit).reverse();
@@ -431,7 +435,7 @@ export class BookService {
       catchError(() => {
         // Fallback to mock data
         const viewedBooks = this.mockBooks.filter(b => {
-          const idStr = typeof b.id === 'string' ? b.id : b.id.toString();
+          const idStr = typeof b.id === 'string' ? b.id : String(b.id);
           return viewedIds.includes(idStr);
         });
         return of(viewedBooks.slice(-limit).reverse());
@@ -441,7 +445,7 @@ export class BookService {
 
   private addToViewedBooks(book: Book): void {
     const viewedIds = this.localStorage.getItem<string[]>(this.VIEWED_BOOKS_KEY) || [];
-    const bookIdStr = typeof book.id === 'string' ? book.id : book.id.toString();
+    const bookIdStr = typeof book.id === 'string' ? book.id : String(book.id);
     const updatedIds = [bookIdStr, ...viewedIds.filter(id => id !== bookIdStr)].slice(0, 10);
     this.localStorage.setItem(this.VIEWED_BOOKS_KEY, updatedIds);
   }

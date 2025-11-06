@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavMenuComponent } from './navigation/nav-menu.component';
 import { SearchBarComponent } from './navigation/search-bar.component';
-import { CartService } from '../../services/cart.service';
+import { CartService } from '../../../services/cart.service';
 import { Observable } from 'rxjs';
 
 @Component({

@@ -59,19 +59,19 @@ import { Observable } from 'rxjs';
               <div class="space-y-4 mb-6">
                 <div class="flex justify-between">
                   <span class="font-sans text-charcoal">Subtotal</span>
-                  <span class="font-serif text-chocolate">${{ (cart$ | async)?.subtotal.toFixed(2) || '0.00' }}</span>
+                  <span class="font-serif text-chocolate"><ng-container>$</ng-container>{{ subtotal }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="font-sans text-charcoal">Shipping</span>
-                  <span class="font-serif text-chocolate">${{ (cart$ | async)?.shipping.toFixed(2) || '0.00' }}</span>
+                  <span class="font-serif text-chocolate"><ng-container>$</ng-container>{{ shipping }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="font-sans text-charcoal">Tax (8%)</span>
-                  <span class="font-serif text-chocolate">${{ tax.toFixed(2) }}</span>
+                  <span class="font-serif text-chocolate"><ng-container>$</ng-container>{{ taxDisplay }}</span>
                 </div>
                 <div class="border-t border-soft-taupe pt-4 flex justify-between">
                   <span class="font-bold font-serif text-chocolate">Total</span>
-                  <span class="font-bold font-serif text-chocolate">${{ total.toFixed(2) }}</span>
+                  <span class="font-bold font-serif text-chocolate"><ng-container>$</ng-container>{{ totalDisplay }}</span>
                 </div>
               </div>
               <button 
@@ -89,6 +89,7 @@ import { Observable } from 'rxjs';
 })
 export class CheckoutComponent implements OnInit {
   cart$!: Observable<Cart>;
+  cart: Cart | null = null;
   shippingInfo = {
     name: '',
     email: '',
@@ -105,6 +106,10 @@ export class CheckoutComponent implements OnInit {
   paymentMethods = ['Credit Card', 'PayPal', 'Apple Pay'];
   tax = 0;
   total = 0;
+  subtotal: string = '0.00';
+  shipping: string = '0.00';
+  taxDisplay: string = '0.00';
+  totalDisplay: string = '0.00';
 
   constructor(
     private cartService: CartService,
@@ -114,8 +119,13 @@ export class CheckoutComponent implements OnInit {
   ngOnInit(): void {
     this.cart$ = this.cartService.cart$;
     this.cart$.subscribe(cart => {
+      this.cart = cart;
       this.tax = cart.subtotal * 0.08;
       this.total = cart.total + this.tax;
+      this.subtotal = (cart.subtotal || 0).toFixed(2);
+      this.shipping = (cart.shipping || 0).toFixed(2);
+      this.taxDisplay = this.tax.toFixed(2);
+      this.totalDisplay = this.total.toFixed(2);
     });
   }
 

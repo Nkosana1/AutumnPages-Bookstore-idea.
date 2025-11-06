@@ -10,15 +10,28 @@ import { LocalStorageService } from './localStorage.service';
 export class CartService {
   private readonly CART_KEY = 'autumnpages_cart';
   
-  private cartSubject = new BehaviorSubject<Cart>(this.loadCartFromStorage());
+  private cartSubject = new BehaviorSubject<Cart>(this.getEmptyCart());
 
   cart$ = this.cartSubject.asObservable();
 
   constructor(private localStorage: LocalStorageService) {
-    // Initialize cart from localStorage
+    // Initialize cart from localStorage after injection
+    const savedCart = this.loadCartFromStorage();
+    this.cartSubject.next(savedCart);
+    
+    // Save cart to localStorage whenever it changes
     this.cartSubject.subscribe(cart => {
       this.saveCartToStorage(cart);
     });
+  }
+
+  private getEmptyCart(): Cart {
+    return {
+      items: [],
+      total: 0,
+      subtotal: 0,
+      shipping: 0
+    };
   }
 
   addItem(book: Book, quantity: number = 1): void {
@@ -80,18 +93,21 @@ export class CartService {
   }
 
   private loadCartFromStorage(): Cart {
-    const savedCart = this.localStorage.getItem<Cart>(this.CART_KEY);
-    if (savedCart) {
-      // Recalculate totals
-      this.updateCartTotals(savedCart);
-      return savedCart;
+    try {
+      const savedCart = this.localStorage.getItem<Cart>(this.CART_KEY);
+      if (savedCart) {
+        // Ensure items array exists
+        if (!savedCart.items) {
+          savedCart.items = [];
+        }
+        // Recalculate totals
+        this.updateCartTotals(savedCart);
+        return savedCart;
+      }
+    } catch (error) {
+      console.error('Error loading cart from storage:', error);
     }
-    return {
-      items: [],
-      total: 0,
-      subtotal: 0,
-      shipping: 0
-    };
+    return this.getEmptyCart();
   }
 
   private saveCartToStorage(cart: Cart): void {

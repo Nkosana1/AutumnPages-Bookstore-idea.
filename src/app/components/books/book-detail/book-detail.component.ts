@@ -47,13 +47,13 @@ import { Observable } from 'rxjs';
             <app-rating-stars [rating]="book.rating" [showRating]="true"></app-rating-stars>
             <span class="text-charcoal font-sans">
               {{ book.publicationDate ? (book.publicationDate | date:'yyyy') : book.publishedYear }} 
-              • {{ book.pageCount || book.pages }} pages
+              • {{ book.pageCount || 0 }} pages
               <span *ngIf="book.reviewCount"> • {{ book.reviewCount }} reviews</span>
             </span>
           </div>
 
           <div class="mb-6">
-            <p class="text-3xl font-bold text-autumn-orange font-serif mb-4">${{ book.price }}</p>
+            <p class="text-3xl font-bold text-autumn-orange font-serif mb-4">$<span>{{ book.price }}</span></p>
             <p *ngIf="!book.inStock" class="text-red-600 font-semibold mb-2">Currently Out of Stock</p>
             <p class="text-lg text-charcoal font-sans leading-relaxed mb-4">{{ book.description }}</p>
             <div class="space-y-1 text-sm text-charcoal font-sans">
@@ -132,7 +132,7 @@ import { Observable } from 'rxjs';
       <!-- Related Books -->
       <div>
         <h2 class="text-3xl font-bold text-chocolate mb-6 font-serif">You May Also Like</h2>
-        <app-book-grid [books]="relatedBooks$ | async"></app-book-grid>
+        <app-book-grid [books]="(relatedBooks$ | async) || []"></app-book-grid>
       </div>
     </div>
   `,

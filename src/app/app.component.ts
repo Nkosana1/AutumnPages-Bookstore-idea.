@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/layout/header/header.component';
 import { FooterComponent } from './components/layout/footer/footer.component';
@@ -6,12 +7,16 @@ import { FooterComponent } from './components/layout/footer/footer.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent],
   template: `
     <div class="min-h-screen bg-gradient-warm flex flex-col">
       <app-header></app-header>
       <main class="flex-grow">
         <router-outlet></router-outlet>
+        <!-- Fallback if route fails -->
+        <div *ngIf="false" class="p-4 text-center text-chocolate">
+          <p>Loading...</p>
+        </div>
       </main>
       <app-footer></app-footer>
     </div>

@@ -64,7 +64,7 @@ import { map } from 'rxjs/operators';
             </app-rating-filter>
           </div>
           <div class="lg:col-span-3">
-            <app-book-grid *ngIf="(filteredBooks$ | async)?.length" [books]="filteredBooks$ | async"></app-book-grid>
+            <app-book-grid *ngIf="(filteredBooks$ | async)?.length" [books]="(filteredBooks$ | async) || []"></app-book-grid>
             <app-empty-state 
               *ngIf="(filteredBooks$ | async)?.length === 0"
               title="No books found"
@@ -78,7 +78,7 @@ import { map } from 'rxjs/operators';
   styles: []
 })
 export class BooksComponent implements OnInit {
-  books$: Observable<Book[]> = this.bookService.getBooks();
+  books$!: Observable<Book[]>;
   filteredBooks$!: Observable<Book[]>;
   selectedCategory: string = 'All';
   sortBy: 'popularity' | 'newest' | 'price' | 'rating' = 'popularity';
@@ -99,6 +99,7 @@ export class BooksComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.books$ = this.bookService.getBooks();
     // Check for search query in route
     this.route.queryParams.subscribe(params => {
       if (params['searchQuery']) {

@@ -15,7 +15,7 @@ import { Book } from '../../../models/book.interface';
              loading="lazy"
              class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
         <div class="absolute top-4 right-4 bg-autumn-orange text-vanilla px-3 py-1 rounded-full text-sm font-semibold">
-          ${{ book.price }}
+          $<span>{{ book.price }}</span>
         </div>
         <div class="absolute top-4 left-4 flex items-center space-x-1 bg-burgundy bg-opacity-90 text-vanilla px-3 py-1 rounded-full">
           <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">

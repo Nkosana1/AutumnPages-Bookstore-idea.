@@ -24,13 +24,21 @@ export class WishlistService {
     }
   }
 
-  removeFromWishlist(bookId: number): void {
+  removeFromWishlist(bookId: string | number): void {
     const current = this.wishlistSubject.value;
-    this.wishlistSubject.next(current.filter(b => b.id !== bookId));
+    const idStr = typeof bookId === 'string' ? bookId : String(bookId);
+    this.wishlistSubject.next(current.filter(b => {
+      const bIdStr = typeof b.id === 'string' ? b.id : String(b.id);
+      return bIdStr !== idStr;
+    }));
   }
 
-  isInWishlist(bookId: number): boolean {
-    return this.wishlistSubject.value.some(b => b.id === bookId);
+  isInWishlist(bookId: string | number): boolean {
+    const idStr = typeof bookId === 'string' ? bookId : String(bookId);
+    return this.wishlistSubject.value.some(b => {
+      const bIdStr = typeof b.id === 'string' ? b.id : String(b.id);
+      return bIdStr === idStr;
+    });
   }
 
   getWishlistCount(): Observable<number> {

@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
       <h3 class="text-lg font-bold text-chocolate mb-3 font-serif">Price Range</h3>
       <div class="space-y-4">
         <div>
-          <label class="block text-sm text-charcoal font-sans mb-2">Min: ${{ minPrice }}</label>
+          <label class="block text-sm text-charcoal font-sans mb-2">Min: $<span>{{ minPrice }}</span></label>
           <input 
             type="range" 
             min="0" 
@@ -21,7 +21,7 @@ import { FormsModule } from '@angular/forms';
             class="w-full">
         </div>
         <div>
-          <label class="block text-sm text-charcoal font-sans mb-2">Max: ${{ maxPrice }}</label>
+          <label class="block text-sm text-charcoal font-sans mb-2">Max: $<span>{{ maxPrice }}</span></label>
           <input 
             type="range" 
             min="0" 

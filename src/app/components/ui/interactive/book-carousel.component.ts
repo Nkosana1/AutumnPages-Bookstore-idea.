@@ -7,7 +7,7 @@ import { Book } from '../../../models/book.interface';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="relative overflow-hidden">
+    <div *ngIf="books && books.length > 0" class="relative overflow-hidden">
       <div class="flex transition-transform duration-500 ease-in-out" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
         <div *ngFor="let book of books; let i = index" 
              class="min-w-full px-4 flex-shrink-0">
@@ -21,7 +21,7 @@ import { Book } from '../../../models/book.interface';
               <p class="text-soft-taupe mb-4 font-sans">by {{ book.author }}</p>
               <p class="text-charcoal mb-4 font-sans line-clamp-3">{{ book.description }}</p>
               <div class="flex items-center space-x-4">
-                <span class="text-xl font-bold text-autumn-orange font-serif">${{ book.price }}</span>
+                <span class="text-xl font-bold text-autumn-orange font-serif">$<span>{{ book.price }}</span></span>
                 <button class="bg-gradient-autumn hover:bg-deep-rust text-vanilla px-6 py-2 rounded-lg font-semibold transition-all">
                   View Details
                 </button>
@@ -51,6 +51,9 @@ import { Book } from '../../../models/book.interface';
         </button>
       </div>
     </div>
+    <div *ngIf="!books || books.length === 0" class="text-center py-8 text-charcoal font-sans">
+      No books available at the moment.
+    </div>
   `,
   styles: [`
     .line-clamp-3 {
@@ -71,21 +74,29 @@ export class BookCarouselComponent implements OnInit {
   }
 
   next(): void {
-    this.currentIndex = (this.currentIndex + 1) % this.books.length;
+    if (this.books.length > 0) {
+      this.currentIndex = (this.currentIndex + 1) % this.books.length;
+    }
   }
 
   previous(): void {
-    this.currentIndex = (this.currentIndex - 1 + this.books.length) % this.books.length;
+    if (this.books.length > 0) {
+      this.currentIndex = (this.currentIndex - 1 + this.books.length) % this.books.length;
+    }
   }
 
   goToSlide(index: number): void {
-    this.currentIndex = index;
+    if (index >= 0 && index < this.books.length) {
+      this.currentIndex = index;
+    }
   }
 
   startAutoPlay(): void {
-    this.autoPlayInterval = setInterval(() => {
-      this.next();
-    }, 5000);
+    if (this.books.length > 0) {
+      this.autoPlayInterval = setInterval(() => {
+        this.next();
+      }, 5000);
+    }
   }
 
   stopAutoPlay(): void {

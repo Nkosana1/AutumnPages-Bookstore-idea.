@@ -9,7 +9,7 @@ export class ReviewService {
   private reviews: Review[] = [
     {
       id: 1,
-      bookId: 1,
+      bookId: '1',
       userId: 1,
       userName: 'Book Lover',
       userAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100',
@@ -21,7 +21,7 @@ export class ReviewService {
     },
     {
       id: 2,
-      bookId: 1,
+      bookId: '1',
       userId: 2,
       userName: 'Reading Enthusiast',
       rating: 4,
@@ -32,8 +32,12 @@ export class ReviewService {
     }
   ];
 
-  getReviewsByBookId(bookId: number): Observable<Review[]> {
-    return of(this.reviews.filter(r => r.bookId === bookId));
+  getReviewsByBookId(bookId: string | number): Observable<Review[]> {
+    const idStr = typeof bookId === 'string' ? bookId : String(bookId);
+    return of(this.reviews.filter(r => {
+      const rIdStr = typeof r.bookId === 'string' ? r.bookId : String(r.bookId);
+      return rIdStr === idStr;
+    }));
   }
 
   addReview(review: Review): Observable<Review> {

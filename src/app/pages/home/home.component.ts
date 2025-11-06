@@ -8,8 +8,8 @@ import { BookGridComponent } from '../../components/books/book-grid/book-grid.co
 import { BookCarouselComponent } from '../../components/ui/interactive/book-carousel.component';
 import { SeasonalReadingListComponent } from '../../components/ui/interactive/seasonal-reading-list.component';
 import { AuthorSpotlightComponent } from '../../components/ui/cards/author-spotlight.component';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -52,7 +52,7 @@ import { map } from 'rxjs/operators';
             <h2 class="text-4xl font-bold text-chocolate mb-4 font-serif">Recommended for You</h2>
             <p class="text-lg text-charcoal font-sans">Discover books we think you'll love</p>
           </div>
-          <app-book-carousel [books]="featuredBooks$ | async"></app-book-carousel>
+          <app-book-carousel [books]="(featuredBooks$ | async) || []"></app-book-carousel>
         </div>
       </section>
 
@@ -62,7 +62,7 @@ import { map } from 'rxjs/operators';
           <app-seasonal-reading-list 
             title="Autumn Reading List"
             description="Cozy up with these perfect fall reads"
-            [books]="seasonalBooks$ | async">
+            [books]="(seasonalBooks$ | async) || []">
           </app-seasonal-reading-list>
         </div>
       </section>
@@ -74,14 +74,14 @@ import { map } from 'rxjs/operators';
             <h2 class="text-4xl font-bold text-chocolate mb-4 font-serif">Featured Books</h2>
             <p class="text-lg text-charcoal font-sans">Handpicked treasures for your reading pleasure</p>
           </div>
-          <app-book-grid [books]="featuredBooks$ | async"></app-book-grid>
+          <app-book-grid [books]="(featuredBooks$ | async) || []"></app-book-grid>
         </div>
       </section>
 
       <!-- Author Spotlight -->
       <section class="py-16 bg-parchment">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <app-author-spotlight [author]="featuredAuthor$ | async"></app-author-spotlight>
+          <app-author-spotlight *ngIf="featuredAuthor$ | async as author" [author]="author"></app-author-spotlight>
         </div>
       </section>
 
@@ -150,13 +150,30 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.featuredBooks$ = this.bookService.getBooks().pipe(
-      map(books => books.slice(0, 4))
-    );
-    this.seasonalBooks$ = this.bookService.getBooks().pipe(
-      map(books => books.slice(4, 8))
-    );
-    this.featuredAuthor$ = this.authorService.getFeaturedAuthor();
+    try {
+      this.featuredBooks$ = this.bookService.getBooks().pipe(
+        map(books => books.slice(0, 4)),
+        catchError(error => {
+          console.error('Error loading featured books:', error);
+          return of([]);
+        })
+      );
+      this.seasonalBooks$ = this.bookService.getBooks().pipe(
+        map(books => books.slice(4, 8)),
+        catchError(error => {
+          console.error('Error loading seasonal books:', error);
+          return of([]);
+        })
+      );
+      this.featuredAuthor$ = this.authorService.getFeaturedAuthor().pipe(
+        catchError(error => {
+          console.error('Error loading featured author:', error);
+          return of(null);
+        })
+      );
+    } catch (error) {
+      console.error('Error in ngOnInit:', error);
+    }
   }
 }
 

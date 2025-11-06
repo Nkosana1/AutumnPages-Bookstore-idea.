@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
             <div class="space-y-4">
               <div>
                 <p class="font-semibold text-chocolate font-serif">Email</p>
-                <p class="text-charcoal font-sans">contact@autumnpages.com</p>
+                <p class="text-charcoal font-sans">contact&#64;autumnpages.com</p>
               </div>
               <div>
                 <p class="font-semibold text-chocolate font-serif">Phone</p>
