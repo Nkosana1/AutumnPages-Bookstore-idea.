@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Book } from '../../../models/book.interface';
 import { BookService } from '../../../services/book.service';
@@ -24,13 +24,18 @@ import { Observable } from 'rxjs';
           <img [src]="book.coverImage" 
                [alt]="book.title"
                class="w-full rounded-xl shadow-2xl">
-          <button *ngIf="book.previewPages" 
+          <button *ngIf="book.previewImages && book.previewImages.length > 0" 
                   class="mt-4 w-full bg-chocolate hover:bg-deep-rust text-vanilla px-6 py-3 rounded-lg font-semibold transition-all">
             Look Inside
           </button>
         </div>
         <div>
-          <span class="text-sm font-semibold text-olive-green uppercase tracking-wide font-sans">{{ book.category }}</span>
+          <div class="flex flex-wrap gap-2 mb-2">
+            <span *ngFor="let genre of book.genres" 
+                  class="text-sm font-semibold text-olive-green uppercase tracking-wide font-sans">
+              {{ genre }}
+            </span>
+          </div>
           <h1 class="text-4xl font-bold text-chocolate mt-2 mb-4 font-serif">{{ book.title }}</h1>
           <p class="text-xl text-soft-taupe mb-4 font-sans">by 
             <a *ngIf="author$ | async" [routerLink]="['/author', (author$ | async)?.id]" class="hover:text-autumn-orange transition-colors">{{ book.author }}</a>
@@ -39,20 +44,31 @@ import { Observable } from 'rxjs';
           
           <div class="flex items-center space-x-4 mb-6">
             <app-rating-stars [rating]="book.rating" [showRating]="true"></app-rating-stars>
-            <span class="text-charcoal font-sans">{{ book.publishedYear }} • {{ book.pages }} pages</span>
+            <span class="text-charcoal font-sans">
+              {{ book.publicationDate ? (book.publicationDate | date:'yyyy') : book.publishedYear }} 
+              • {{ book.pageCount || book.pages }} pages
+              <span *ngIf="book.reviewCount"> • {{ book.reviewCount }} reviews</span>
+            </span>
           </div>
 
           <div class="mb-6">
             <p class="text-3xl font-bold text-autumn-orange font-serif mb-4">${{ book.price }}</p>
+            <p *ngIf="!book.inStock" class="text-red-600 font-semibold mb-2">Currently Out of Stock</p>
             <p class="text-lg text-charcoal font-sans leading-relaxed mb-4">{{ book.description }}</p>
-            <div *ngIf="book.isbn" class="text-sm text-charcoal font-sans">ISBN: {{ book.isbn }}</div>
+            <div class="space-y-1 text-sm text-charcoal font-sans">
+              <div *ngIf="book.isbn">ISBN: {{ book.isbn }}</div>
+              <div *ngIf="book.publisher">Publisher: {{ book.publisher }}</div>
+            </div>
           </div>
 
           <div class="flex space-x-4 mb-8">
             <button 
               (click)="addToCart()"
+              [disabled]="!book.inStock"
+              [class.opacity-50]="!book.inStock"
+              [class.cursor-not-allowed]="!book.inStock"
               class="flex-1 bg-gradient-autumn hover:bg-deep-rust text-vanilla px-8 py-4 rounded-lg text-lg font-semibold transition-all transform hover:scale-105 shadow-md">
-              Add to Cart
+              {{ book.inStock ? 'Add to Cart' : 'Out of Stock' }}
             </button>
             <button 
               (click)="toggleWishlist()"

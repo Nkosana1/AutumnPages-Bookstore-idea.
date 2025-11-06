@@ -1,17 +1,23 @@
 export interface Book {
-  id: number;
+  id: string;
   title: string;
   author: string;
-  authorId?: number;
+  isbn: string;
   price: number;
-  coverImage: string;
-  description: string;
-  category: string;
   rating: number;
-  publishedYear: number;
-  isbn?: string;
-  pages?: number;
-  previewPages?: string[];
+  reviewCount: number;
+  description: string;
+  genres: string[];
+  coverImage: string;
+  previewImages: string[];
+  publicationDate: Date;
+  pageCount: number;
+  publisher: string;
+  inStock: boolean;
+  // Legacy fields for backward compatibility during migration
+  authorId?: number;
+  category?: string;
+  publishedYear?: number;
   popularity?: number;
   views?: number;
 }

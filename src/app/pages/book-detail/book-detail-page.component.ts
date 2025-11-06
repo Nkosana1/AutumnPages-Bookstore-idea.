@@ -30,7 +30,7 @@ export class BookDetailPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.book$ = this.route.params.pipe(
-      switchMap(params => this.bookService.getBookById(+params['id']))
+      switchMap(params => this.bookService.getBookById(params['id']))
     );
   }
 }

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BookService } from '../../services/book.service';
 import { Book } from '../../models/book.interface';
+import { BookFilters } from '../../interfaces/book-filters.interface';
 import { BookGridComponent } from '../../components/books/book-grid/book-grid.component';
 import { GenreFilterComponent } from '../../components/books/book-filters/genre-filter.component';
 import { PriceFilterComponent } from '../../components/books/book-filters/price-filter.component';
@@ -100,7 +101,10 @@ export class BooksComponent implements OnInit {
   ngOnInit(): void {
     // Check for search query in route
     this.route.queryParams.subscribe(params => {
-      if (params['search']) {
+      if (params['searchQuery']) {
+        this.filters.search = params['searchQuery'];
+      } else if (params['search']) {
+        // Legacy support
         this.filters.search = params['search'];
       }
       this.applyFilters();
@@ -110,20 +114,31 @@ export class BooksComponent implements OnInit {
   }
 
   applyFilters(): void {
-    // Use API with filters if available, otherwise filter client-side
-    const apiFilters: any = {
+    // Use new filter structure with legacy support
+    const apiFilters: BookFilters = {
+      genres: this.filters.category === 'All' ? undefined : [this.filters.category],
+      priceRange: this.filters.minPrice !== undefined || this.filters.maxPrice !== undefined 
+        ? { 
+            min: this.filters.minPrice || 0, 
+            max: this.filters.maxPrice || 100 
+          } 
+        : undefined,
+      rating: this.filters.minRating,
+      searchQuery: this.filters.search,
+      sortBy: this.sortBy,
+      // Legacy support
       category: this.filters.category === 'All' ? undefined : this.filters.category,
       minPrice: this.filters.minPrice,
       maxPrice: this.filters.maxPrice,
       minRating: this.filters.minRating,
-      sortBy: this.sortBy,
       search: this.filters.search
     };
 
     // Remove undefined values
     Object.keys(apiFilters).forEach(key => {
-      if (apiFilters[key] === undefined || apiFilters[key] === '') {
-        delete apiFilters[key];
+      const value = (apiFilters as any)[key];
+      if (value === undefined || value === '' || (Array.isArray(value) && value.length === 0)) {
+        delete (apiFilters as any)[key];
       }
     });
 
@@ -132,7 +147,12 @@ export class BooksComponent implements OnInit {
     } else {
       this.filteredBooks$ = this.books$.pipe(
         map(books => {
-          let filtered = this.bookService.filterBooks(books, this.filters);
+          let filtered = this.bookService.filterBooks(books, {
+            category: this.filters.category,
+            minPrice: this.filters.minPrice,
+            maxPrice: this.filters.maxPrice,
+            minRating: this.filters.minRating
+          });
           return this.bookService.sortBooks(filtered, this.sortBy);
         })
       );

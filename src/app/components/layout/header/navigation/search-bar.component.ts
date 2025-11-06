@@ -33,7 +33,7 @@ import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
              class="mt-2 border border-soft-taupe rounded-lg bg-vanilla max-h-60 overflow-y-auto">
           <a *ngFor="let suggestion of suggestions"
              [routerLink]="['/books']"
-             [queryParams]="{search: suggestion}"
+             [queryParams]="{searchQuery: suggestion}"
              (click)="selectSuggestion(suggestion)"
              class="block px-4 py-2 hover:bg-cozy-cream text-chocolate font-sans cursor-pointer">
             {{ suggestion }}
