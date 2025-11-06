@@ -1,14 +1,40 @@
 # AutumnPages - Cozy Bookstore Website
 
-A beautiful, warm bookstore website built with Angular, TypeScript, and Tailwind CSS, featuring an inviting autumn color palette.
+A beautiful, warm bookstore website built with Angular, TypeScript, and Tailwind CSS, featuring an inviting autumn color palette and comprehensive architecture.
 
 ## 🎨 Features
 
 - **Warm Autumn Design**: Rich, cozy colors inspired by autumn days
 - **Responsive Layout**: Works beautifully on all devices
-- **Book Catalog**: Browse and filter books by category
+- **Book Catalog**: Browse and filter books by category, price, and rating
+- **Shopping Cart**: Add items to cart and proceed to checkout
 - **Elegant UI**: Modern design with smooth animations and transitions
 - **TypeScript**: Fully typed for better development experience
+- **Modular Architecture**: Well-organized component structure
+
+## 🏗️ Project Architecture
+
+```
+autumn-pages/
+├── src/
+│   ├── app/
+│   │   ├── components/
+│   │   │   ├── layout/          # Header, Footer, Sidebars
+│   │   │   ├── books/            # Book-related components
+│   │   │   ├── ui/               # Reusable UI components
+│   │   │   └── shared/           # Loading, Error, Empty states
+│   │   ├── pages/                # Page components
+│   │   ├── services/             # Business logic services
+│   │   ├── models/               # Data models
+│   │   ├── interfaces/           # TypeScript interfaces
+│   │   ├── guards/               # Route guards
+│   │   ├── interceptors/         # HTTP interceptors
+│   │   ├── pipes/                # Custom pipes
+│   │   ├── directives/           # Custom directives
+│   │   └── utils/                # Utility functions
+│   ├── assets/                   # Images, fonts, data
+│   └── styles/                   # Global styles
+```
 
 ## 🚀 Getting Started
 
@@ -41,25 +67,11 @@ The website uses a warm autumn color scheme:
 - Rich chocolate (`#5d4037`)
 - And more warm, inviting tones
 
-## 📁 Project Structure
+## 📝 Typography
 
-```
-src/
-├── app/
-│   ├── components/
-│   │   ├── book-catalog/
-│   │   ├── book-card/
-│   │   ├── hero/
-│   │   ├── home/
-│   │   └── navigation/
-│   ├── models/
-│   │   └── book.interface.ts
-│   ├── services/
-│   │   └── book.service.ts
-│   ├── app.component.ts
-│   └── app.routes.ts
-└── styles.css
-```
+- **Headings**: Cormorant Garamond (elegant serif)
+- **Body Text**: Inter (readable sans-serif)
+- **Accents**: Playfair Display (special accents)
 
 ## 🛠️ Built With
 
@@ -71,4 +83,3 @@ src/
 ## 📝 License
 
 This project is open source and available under the MIT License.
-
