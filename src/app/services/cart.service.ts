@@ -2,19 +2,24 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Cart, CartItem } from '../interfaces/cart.interface';
 import { Book } from '../models/book.interface';
+import { LocalStorageService } from './localStorage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private cartSubject = new BehaviorSubject<Cart>({
-    items: [],
-    total: 0,
-    subtotal: 0,
-    shipping: 0
-  });
+  private readonly CART_KEY = 'autumnpages_cart';
+  
+  private cartSubject = new BehaviorSubject<Cart>(this.loadCartFromStorage());
 
   cart$ = this.cartSubject.asObservable();
+
+  constructor(private localStorage: LocalStorageService) {
+    // Initialize cart from localStorage
+    this.cartSubject.subscribe(cart => {
+      this.saveCartToStorage(cart);
+    });
+  }
 
   addItem(book: Book, quantity: number = 1): void {
     const currentCart = this.cartSubject.value;
@@ -72,6 +77,25 @@ export class CartService {
         observer.next(count);
       });
     });
+  }
+
+  private loadCartFromStorage(): Cart {
+    const savedCart = this.localStorage.getItem<Cart>(this.CART_KEY);
+    if (savedCart) {
+      // Recalculate totals
+      this.updateCartTotals(savedCart);
+      return savedCart;
+    }
+    return {
+      items: [],
+      total: 0,
+      subtotal: 0,
+      shipping: 0
+    };
+  }
+
+  private saveCartToStorage(cart: Cart): void {
+    this.localStorage.setItem(this.CART_KEY, cart);
   }
 }
 

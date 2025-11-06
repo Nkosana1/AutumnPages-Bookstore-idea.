@@ -2,15 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BookService } from '../../services/book.service';
+import { AuthorService } from '../../services/author.service';
 import { Book } from '../../models/book.interface';
 import { BookGridComponent } from '../../components/books/book-grid/book-grid.component';
+import { BookCarouselComponent } from '../../components/ui/interactive/book-carousel.component';
+import { SeasonalReadingListComponent } from '../../components/ui/interactive/seasonal-reading-list.component';
+import { AuthorSpotlightComponent } from '../../components/ui/cards/author-spotlight.component';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, BookGridComponent],
+  imports: [CommonModule, RouterModule, BookGridComponent, BookCarouselComponent, SeasonalReadingListComponent, AuthorSpotlightComponent],
   template: `
     <div class="min-h-screen">
       <!-- Hero Section -->
@@ -41,6 +45,28 @@ import { map } from 'rxjs/operators';
         <div class="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-cozy-cream to-transparent"></div>
       </div>
       
+      <!-- Book Recommendations Carousel -->
+      <section class="py-16 bg-gradient-warm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-chocolate mb-4 font-serif">Recommended for You</h2>
+            <p class="text-lg text-charcoal font-sans">Discover books we think you'll love</p>
+          </div>
+          <app-book-carousel [books]="featuredBooks$ | async"></app-book-carousel>
+        </div>
+      </section>
+
+      <!-- Seasonal Reading Lists -->
+      <section class="py-16 bg-parchment">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <app-seasonal-reading-list 
+            title="Autumn Reading List"
+            description="Cozy up with these perfect fall reads"
+            [books]="seasonalBooks$ | async">
+          </app-seasonal-reading-list>
+        </div>
+      </section>
+
       <!-- Featured Books Section -->
       <section class="py-16 bg-gradient-warm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -49,6 +75,13 @@ import { map } from 'rxjs/operators';
             <p class="text-lg text-charcoal font-sans">Handpicked treasures for your reading pleasure</p>
           </div>
           <app-book-grid [books]="featuredBooks$ | async"></app-book-grid>
+        </div>
+      </section>
+
+      <!-- Author Spotlight -->
+      <section class="py-16 bg-parchment">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <app-author-spotlight [author]="featuredAuthor$ | async"></app-author-spotlight>
         </div>
       </section>
 
@@ -97,6 +130,8 @@ import { map } from 'rxjs/operators';
 })
 export class HomeComponent implements OnInit {
   featuredBooks$!: Observable<Book[]>;
+  seasonalBooks$!: Observable<Book[]>;
+  featuredAuthor$!: Observable<any>;
   
   categories = [
     { name: 'Fiction', count: 12 },
@@ -109,12 +144,19 @@ export class HomeComponent implements OnInit {
     { name: 'Biography', count: 6 }
   ];
 
-  constructor(private bookService: BookService) {}
+  constructor(
+    private bookService: BookService,
+    private authorService: AuthorService
+  ) {}
 
   ngOnInit(): void {
     this.featuredBooks$ = this.bookService.getBooks().pipe(
       map(books => books.slice(0, 4))
     );
+    this.seasonalBooks$ = this.bookService.getBooks().pipe(
+      map(books => books.slice(4, 8))
+    );
+    this.featuredAuthor$ = this.authorService.getFeaturedAuthor();
   }
 }
 

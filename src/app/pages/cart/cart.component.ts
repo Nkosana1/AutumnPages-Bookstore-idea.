@@ -1,20 +1,52 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { CartService } from '../../services/cart.service';
+import { Cart, CartItem } from '../../interfaces/cart.interface';
+import { QuantitySelectorComponent } from '../../components/ui/interactive/quantity-selector.component';
+import { EmptyStateComponent } from '../../components/shared/empty-state/empty-state.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, QuantitySelectorComponent, EmptyStateComponent],
   template: `
     <div class="min-h-screen bg-gradient-warm py-12">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="text-4xl font-bold text-chocolate mb-8 font-serif">Shopping Cart</h1>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div class="lg:col-span-2">
-            <div class="bg-gradient-card rounded-xl p-6 mb-4">
-              <p class="text-charcoal font-sans">Your cart is empty. Start shopping!</p>
+            <div *ngIf="(cart$ | async)?.items.length; else emptyCart">
+              <div *ngFor="let item of (cart$ | async)?.items" 
+                   class="bg-gradient-card rounded-xl p-6 mb-4 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
+                <img [src]="item.book.coverImage" 
+                     [alt]="item.book.title"
+                     class="w-24 h-32 object-cover rounded-lg">
+                <div class="flex-1">
+                  <h3 class="text-xl font-bold text-chocolate mb-2 font-serif">{{ item.book.title }}</h3>
+                  <p class="text-soft-taupe mb-2 font-sans">by {{ item.book.author }}</p>
+                  <p class="text-lg font-bold text-autumn-orange font-serif">${{ item.price }}</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                  <app-quantity-selector 
+                    [quantity]="item.quantity"
+                    (quantityChange)="updateQuantity(item.id, $event)">
+                  </app-quantity-selector>
+                  <button 
+                    (click)="removeItem(item.id)"
+                    class="text-red-600 hover:text-red-800 font-sans">
+                    Remove
+                  </button>
+                </div>
+              </div>
             </div>
+            <ng-template #emptyCart>
+              <app-empty-state 
+                title="Your cart is empty"
+                message="Start shopping to add books to your cart!">
+              </app-empty-state>
+            </ng-template>
           </div>
           <div class="lg:col-span-1">
             <div class="bg-gradient-card rounded-xl p-6 sticky top-24">
@@ -22,18 +54,20 @@ import { RouterModule } from '@angular/router';
               <div class="space-y-4 mb-6">
                 <div class="flex justify-between">
                   <span class="font-sans text-charcoal">Subtotal</span>
-                  <span class="font-serif text-chocolate">$0.00</span>
+                  <span class="font-serif text-chocolate">${{ (cart$ | async)?.subtotal.toFixed(2) || '0.00' }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="font-sans text-charcoal">Shipping</span>
-                  <span class="font-serif text-chocolate">$0.00</span>
+                  <span class="font-serif text-chocolate">${{ (cart$ | async)?.shipping.toFixed(2) || '0.00' }}</span>
                 </div>
                 <div class="border-t border-soft-taupe pt-4 flex justify-between">
                   <span class="font-bold font-serif text-chocolate">Total</span>
-                  <span class="font-bold font-serif text-chocolate">$0.00</span>
+                  <span class="font-bold font-serif text-chocolate">${{ (cart$ | async)?.total.toFixed(2) || '0.00' }}</span>
                 </div>
               </div>
               <a routerLink="/checkout" 
+                 [class.opacity-50]="!((cart$ | async)?.items.length)"
+                 [class.cursor-not-allowed]="!((cart$ | async)?.items.length)"
                  class="block w-full bg-gradient-autumn hover:bg-deep-rust text-vanilla text-center py-3 rounded-lg font-semibold transition-all">
                 Proceed to Checkout
               </a>
@@ -45,6 +79,21 @@ import { RouterModule } from '@angular/router';
   `,
   styles: []
 })
-export class CartComponent {
+export class CartComponent implements OnInit {
+  cart$!: Observable<Cart>;
+
+  constructor(private cartService: CartService) {}
+
+  ngOnInit(): void {
+    this.cart$ = this.cartService.cart$;
+  }
+
+  updateQuantity(itemId: number, quantity: number): void {
+    this.cartService.updateQuantity(itemId, quantity);
+  }
+
+  removeItem(itemId: number): void {
+    this.cartService.removeItem(itemId);
+  }
 }
 
