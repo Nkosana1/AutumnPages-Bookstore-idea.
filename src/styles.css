@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Autumn Styles */
+:root {
+  --autumn-orange: #d35400;
+  --warm-amber: #f39c12;
+  --deep-rust: #a84300;
+  --cozy-cream: #fef5e7;
+  --chocolate: #5d4037;
+  --burgundy: #8b4513;
+  --olive-green: #556b2f;
+  --mustard: #daa520;
+  --parchment: #fdf6e3;
+  --soft-taupe: #d7ccc8;
+  --charcoal: #374151;
+  --vanilla: #fff8e1;
+}
+
+body {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  background: linear-gradient(45deg, #fef5e7 0%, #fff8e1 100%);
+  min-height: 100vh;
+}
+
+/* Smooth transitions */
+* {
+  transition: all 0.3s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cozy-cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--autumn-orange);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--deep-rust);
+}
+
