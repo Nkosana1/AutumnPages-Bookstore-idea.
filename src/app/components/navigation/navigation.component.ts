@@ -15,29 +15,29 @@ import { RouterModule } from '@angular/router';
               <svg class="w-8 h-8 text-vanilla" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
               </svg>
-              <span class="text-2xl font-bold text-vanilla font-playfair">AutumnPages</span>
+              <span class="text-2xl font-bold text-vanilla font-accent">AutumnPages</span>
             </a>
           </div>
           <div class="hidden md:flex space-x-8">
             <a routerLink="/" 
                routerLinkActive="text-mustard" 
                [routerLinkActiveOptions]="{exact: true}"
-               class="text-vanilla hover:text-mustard transition-colors font-crimson text-lg">
+               class="text-vanilla hover:text-mustard transition-colors font-sans text-lg">
               Home
             </a>
             <a routerLink="/books" 
                routerLinkActive="text-mustard"
-               class="text-vanilla hover:text-mustard transition-colors font-crimson text-lg">
+               class="text-vanilla hover:text-mustard transition-colors font-sans text-lg">
               Books
             </a>
             <a routerLink="/" 
                fragment="about"
-               class="text-vanilla hover:text-mustard transition-colors font-crimson text-lg">
+               class="text-vanilla hover:text-mustard transition-colors font-sans text-lg">
               About
             </a>
             <a routerLink="/" 
                fragment="contact"
-               class="text-vanilla hover:text-mustard transition-colors font-crimson text-lg">
+               class="text-vanilla hover:text-mustard transition-colors font-sans text-lg">
               Contact
             </a>
           </div>
@@ -58,14 +58,7 @@ import { RouterModule } from '@angular/router';
       </div>
     </nav>
   `,
-  styles: [`
-    .font-playfair {
-      font-family: 'Playfair Display', serif;
-    }
-    .font-crimson {
-      font-family: 'Crimson Text', serif;
-    }
-  `]
+  styles: []
 })
 export class NavigationComponent {
 }

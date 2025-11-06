@@ -16,10 +16,15 @@
   --soft-taupe: #d7ccc8;
   --charcoal: #374151;
   --vanilla: #fff8e1;
+  
+  /* Typography with Character */
+  --font-serif: 'Cormorant Garamond', serif;    /* Elegant headings */
+  --font-sans: 'Inter', sans-serif;             /* Readable body text */
+  --font-accent: 'Playfair Display', serif;     /* Special accents */
 }
 
 body {
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: var(--font-sans);
   background: linear-gradient(45deg, #fef5e7 0%, #fff8e1 100%);
   min-height: 100vh;
 }

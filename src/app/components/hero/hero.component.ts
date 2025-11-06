@@ -11,10 +11,10 @@ import { CommonModule } from '@angular/common';
            style="background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1920&q=80');"></div>
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
         <div class="text-center">
-          <h1 class="text-5xl md:text-7xl font-bold text-vanilla mb-6 font-playfair drop-shadow-lg">
+          <h1 class="text-5xl md:text-7xl font-bold text-vanilla mb-6 font-serif drop-shadow-lg">
             Welcome to AutumnPages
           </h1>
-          <p class="text-xl md:text-2xl text-vanilla mb-8 max-w-3xl mx-auto font-crimson drop-shadow-md">
+          <p class="text-xl md:text-2xl text-vanilla mb-8 max-w-3xl mx-auto font-sans drop-shadow-md">
             Discover your next favorite book in our cozy collection. 
             Where stories come alive and pages turn with warmth.
           </p>
@@ -34,14 +34,7 @@ import { CommonModule } from '@angular/common';
       <div class="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-cozy-cream to-transparent"></div>
     </div>
   `,
-  styles: [`
-    .font-playfair {
-      font-family: 'Playfair Display', serif;
-    }
-    .font-crimson {
-      font-family: 'Crimson Text', serif;
-    }
-  `]
+  styles: []
 })
 export class HeroComponent {
 }

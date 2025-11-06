@@ -25,6 +25,11 @@ module.exports = {
         'gradient-card': 'linear-gradient(145deg, #ffffff 0%, #fef5e7 100%)',
         'gradient-hero': 'linear-gradient(rgba(211, 84, 0, 0.8), rgba(243, 156, 18, 0.8))',
       },
+      fontFamily: {
+        'serif': ['Cormorant Garamond', 'serif'],
+        'sans': ['Inter', 'sans-serif'],
+        'accent': ['Playfair Display', 'serif'],
+      },
     },
   },
   plugins: [],

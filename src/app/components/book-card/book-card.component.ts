@@ -26,11 +26,11 @@ import { Book } from '../../models/book.interface';
         <div class="mb-2">
           <span class="text-xs font-semibold text-olive-green uppercase tracking-wide">{{ book.category }}</span>
         </div>
-        <h3 class="text-xl font-bold text-chocolate mb-2 font-playfair line-clamp-2">{{ book.title }}</h3>
-        <p class="text-soft-taupe mb-3 font-crimson">by {{ book.author }}</p>
-        <p class="text-charcoal text-sm mb-4 line-clamp-3 font-crimson">{{ book.description }}</p>
+        <h3 class="text-xl font-bold text-chocolate mb-2 font-serif line-clamp-2">{{ book.title }}</h3>
+        <p class="text-soft-taupe mb-3 font-sans">by {{ book.author }}</p>
+        <p class="text-charcoal text-sm mb-4 line-clamp-3 font-sans">{{ book.description }}</p>
         <div class="flex items-center justify-between">
-          <span class="text-sm text-charcoal font-crimson">{{ book.publishedYear }}</span>
+          <span class="text-sm text-charcoal font-sans">{{ book.publishedYear }}</span>
           <button 
             class="bg-gradient-autumn hover:bg-deep-rust text-vanilla px-6 py-2 rounded-lg font-semibold transition-all transform hover:scale-105 shadow-md">
             Add to Cart
@@ -40,12 +40,6 @@ import { Book } from '../../models/book.interface';
     </div>
   `,
   styles: [`
-    .font-playfair {
-      font-family: 'Playfair Display', serif;
-    }
-    .font-crimson {
-      font-family: 'Crimson Text', serif;
-    }
     .line-clamp-2 {
       display: -webkit-box;
       -webkit-line-clamp: 2;

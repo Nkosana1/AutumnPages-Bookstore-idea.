@@ -14,8 +14,8 @@ import { Observable } from 'rxjs';
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
         <div class="text-center mb-12">
-          <h1 class="text-5xl font-bold text-chocolate mb-4 font-playfair">Our Book Collection</h1>
-          <p class="text-xl text-charcoal font-crimson max-w-2xl mx-auto">
+          <h1 class="text-5xl font-bold text-chocolate mb-4 font-serif">Our Book Collection</h1>
+          <p class="text-xl text-charcoal font-sans max-w-2xl mx-auto">
             Curated selections for every reader's taste, wrapped in the warmth of autumn
           </p>
         </div>
@@ -27,7 +27,7 @@ import { Observable } from 'rxjs';
             (click)="filterByCategory(category)"
             [class.bg-gradient-autumn]="selectedCategory === category"
             [class.bg-chocolate]="selectedCategory !== category"
-            class="px-6 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 shadow-md font-crimson text-vanilla">
+            class="px-6 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 shadow-md font-sans text-vanilla">
             {{ category }}
           </button>
         </div>
@@ -45,19 +45,12 @@ import { Observable } from 'rxjs';
           <svg class="w-24 h-24 mx-auto text-soft-taupe mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
           </svg>
-          <p class="text-2xl text-charcoal font-crimson">No books found in this category</p>
+          <p class="text-2xl text-charcoal font-sans">No books found in this category</p>
         </div>
       </div>
     </div>
   `,
-  styles: [`
-    .font-playfair {
-      font-family: 'Playfair Display', serif;
-    }
-    .font-crimson {
-      font-family: 'Crimson Text', serif;
-    }
-  `]
+  styles: []
 })
 export class BookCatalogComponent implements OnInit {
   books$: Observable<Book[]> = this.bookService.getBooks();
